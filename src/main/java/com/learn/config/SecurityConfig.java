@@ -11,9 +11,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig  {
 
     private final SecurityService securityService;
+    private final AuthSuccessHandler authSuccessHandler;
 
-    public SecurityConfig(SecurityService securityService) {
+    public SecurityConfig(SecurityService securityService, AuthSuccessHandler authSuccessHandler) {
         this.securityService = securityService;
+        this.authSuccessHandler = authSuccessHandler;
     }
 
 
@@ -58,9 +60,10 @@ public class SecurityConfig  {
                 .and()
 //                .httpBasic()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/welcome")
-                .failureUrl("/login?error=true")
+                    .loginPage("/login")
+//                  .defaultSuccessUrl("/welcome")
+                    .successHandler(authSuccessHandler)
+                    .failureUrl("/login?error=true")
                 .permitAll()
                 .and()
                 .logout()
